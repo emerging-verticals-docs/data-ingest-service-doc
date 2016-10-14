@@ -1,0 +1,277 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Data-ingest-service-doc by emerging-verticals-docs</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Data-ingest-service-doc</h1>
+        <p>Documentation for Emerging Verticals Data Ingest Service on Predix.io</p>
+
+        <p class="view"><a href="https://github.com/emerging-verticals-docs/data-ingest-service-doc">View the Project on GitHub <small>emerging-verticals-docs/data-ingest-service-doc</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/emerging-verticals-docs/data-ingest-service-doc/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/emerging-verticals-docs/data-ingest-service-doc/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/emerging-verticals-docs/data-ingest-service-doc">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="data-ingest-service" class="anchor" href="#data-ingest-service" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>data-ingest-service</h1>
+
+<p>The Data Ingest Service exposes a REST endpoint to allow users to push data to the cloud.  Data is made available via a RabbitMQ exchange. Users can create actors for the data by binding queues to exchanges.</p>
+
+<h1></h1>
+
+<h2>
+<a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Getting Started</h2>
+
+<h2>
+<a id="prerequisities" class="anchor" href="#prerequisities" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Prerequisities</h2>
+
+<ul>
+<li><p>data-ingest-core-sdk - <a href="https://github.build.ge.com/emerging-verticals/data-ingest-core-sdk">https://github.build.ge.com/emerging-verticals/data-ingest-core-sdk</a></p></li>
+<li><p>event-audit-trail-sdk - <a href="https://github.build.ge.com/emerging-verticals/event-audit-trail-sdk">https://github.build.ge.com/emerging-verticals/event-audit-trail-sdk</a></p></li>
+<li><p>emerging-verticals-commons - <a href="https://github.build.ge.com/emerging-verticals/commons">https://github.build.ge.com/emerging-verticals/commons</a></p></li>
+</ul>
+
+<h2>
+<a id="installing" class="anchor" href="#installing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installing</h2>
+
+<p>The only installation step requirement to run the service is to configure the database.  To setup the database, please run the following file <strong>/src/main/resources/db/migration/V1__init.sql</strong>.  If you are using the default build/deploy steps, you can skip this step because the <a href="https://flywaydb.org/">Flyway</a> configuration will take care of this for you.</p>
+
+<h2>
+<a id="cloud-deployment" class="anchor" href="#cloud-deployment" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Cloud Deployment</h2>
+
+<p>A manifest has been provided</p>
+
+<h2>
+<a id="apis" class="anchor" href="#apis" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>APIs</h2>
+
+<h3>
+<a id="ingest-data-https" class="anchor" href="#ingest-data-https" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Ingest Data (HTTPS)</h3>
+
+<ul>
+<li>
+<p>POST tenants/{tenant_uuid}/ingest</p>
+
+<ul>
+<li>Content - multipart/form-data</li>
+<li>URI path parameters
+
+<ul>
+<li>tenant_uuid - uuid of tenant</li>
+</ul>
+</li>
+<li>Request Body FORM parameters
+
+<ul>
+<li>file - file to be ingested</li>
+<li>routing-key - subscriber queue</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Sample Response Payload</p></li>
+</ul>
+
+<pre><code>  "payload": {
+    "uuid": "ac22ae56-2fa2-47cb-9044-62992c0bba1c",
+    "status": "QUEUED",
+    "filename": "testfile.txt"
+  },
+  "uuid": "969e00ad-3ea8-4468-81b3-08b0239c887c",
+  "status": 1000,
+  "message": "OK",
+  "timestamp": 1459470908881
+</code></pre>
+
+<h3>
+<a id="ingest-data-wss" class="anchor" href="#ingest-data-wss" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Ingest Data (WSS)</h3>
+
+<ul>
+<li>
+<p>messages/ingest</p>
+
+<ul>
+<li>Content - application/x-www-form-urlencoded</li>
+<li>headers
+
+<ul>
+<li>tenant-uuid - uuid of tenant</li>
+<li>routing-key - subscriber queue</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Sample Response Payload</p></li>
+</ul>
+
+<pre><code>  "payload": {
+    "uuid": "ac22ae56-2fa2-47cb-9044-62992c0bba1c",
+    "status": "QUEUED",
+    "filename": "testfile.txt"
+  },
+  "uuid": "969e00ad-3ea8-4468-81b3-08b0239c887c",
+  "status": 1000,
+  "message": "OK",
+  "timestamp": 1459470908881
+</code></pre>
+
+<h3>
+<a id="get-message-status" class="anchor" href="#get-message-status" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Get message status</h3>
+
+<ul>
+<li>
+<p>GET tenants/{tenant_uuid}/status?uuid={uuid}</p>
+
+<ul>
+<li>parameters
+
+<ul>
+<li>tenant_uuid - uuid of tenant</li>
+<li>uuid - uuid of the data ingest message(REQUIRED)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Sample Response Payload</p></li>
+</ul>
+
+<pre><code>  "payload": [
+    {
+      "uuid": "cfd05523-cb3c-435b-92eb-9cbe2211ae23",
+      "ingestDataMessageStatus": "COMPLETE_OK",
+      "timestamp": 1475794948458,
+      "lastUpdated": 1475794948458,
+      "metaData": "{\"uuid\":\"4e6cf345-23ac-4efd-b219-d51adcd3321a\",\"messageUuid\":\"cfd05523-cb3c-435b-92eb-9cbe2211ae23\",\"hash\":null,\"timestamp\":1475794948296,\"status\":1,\"size\":null,\"elapsed\":null,\"source\":\"t2016am\",\"notes\":\"\",\"route\":\"AA\"}"
+    }
+  ],
+  "uuid": "ddc7f50a-6883-45aa-a823-b70e47d2a05c",
+  "status": 1000,
+  "message": "OK",
+  "timestamp": 1459470908881
+</code></pre>
+
+<h3>
+<a id="update-message-status" class="anchor" href="#update-message-status" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Update message status</h3>
+
+<ul>
+<li>
+<p>Put tenants/{tenant_uuid}/status?uuid={uuid}</p>
+
+<ul>
+<li>parameters
+
+<ul>
+<li>tenant_uuid - uuid of tenant</li>
+<li>uuid - uuid of the data ingest message(REQUIRED)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Sample Request</p></li>
+</ul>
+
+<pre><code>{
+"timestamp":4407031691763232,
+"status":"COMPLETE_OK",
+"uuid":"18c119d6-e7d5-4b55-8b85-5727a64e7440",
+"tenantUuid":"eaa0dd0a-06b5-4297-b8b2-3af0c68cd808",
+"attributes":{"source":"testfile","route":"AA","tenant":"eaa0dd0a-06b5-4297-b8b2-3af0c68cd808"}
+} 
+</code></pre>
+
+<ul>
+<li>Sample Response Payload</li>
+</ul>
+
+<pre><code>  "payload": [
+    {
+      "uuid": "cfd05523-cb3c-435b-92eb-9cbe2211ae23",
+      "ingestDataMessageStatus": "COMPLETE_OK",
+      "timestamp": 1475794948458,
+      "lastUpdated": 1475794948458,
+      "metaData": "{\"uuid\":\"4e6cf345-23ac-4efd-b219-d51adcd3321a\",\"messageUuid\":\"cfd05523-cb3c-435b-92eb-9cbe2211ae23\",\"hash\":null,\"timestamp\":1475794948296,\"status\":1,\"size\":null,\"elapsed\":null,\"source\":\"t2016am\",\"notes\":\"\",\"route\":\"AA\"}"
+    }
+  ],
+  "uuid": "ddc7f50a-6883-45aa-a823-b70e47d2a05c",
+  "status": 1000,
+  "message": "OK",
+  "timestamp": 1459470908881
+</code></pre>
+
+<h3>
+<a id="get-tenant" class="anchor" href="#get-tenant" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Get Tenant</h3>
+
+<ul>
+<li>
+<p>GET tenant/{tenant_uuid}</p>
+
+<ul>
+<li>parameters
+
+<ul>
+<li>tenant_uuid - uuid of tenant to retrieve</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Sample Response Payload</p></li>
+</ul>
+
+<pre><code>   "payload": {
+    "id": 15,
+    "tenantUuid": "50e825f9-322c-4082-9899-2d00cfd02a5d",
+    "serviceInstanceId": "00a70108-f954-4e9e-ad35-4e647b6fb99e",
+    "planId": "1aaf5bef-3364-4933-bc94-1142da225b73",
+    "timestamp": 1475694785380,
+    "trustedIssuers": "https://77f5cc0e-76e3-4c82-ac95-cc8c8b01267b.predix-uaa.run.aws-usw02-pr.ice.predix.io/oauth/token",
+    "connectionInformation": "{\"tenantUuid\":\"50e825f9-322c-4082-9899-2d00cfd02a5d\",\"routeInformation\":null,\"catalogueServiceInstanceInformation\":{\"rabbitmq\":{\"serviceInstanceGuid\":\"a7fec8c2-e9e3-49c5-a66f-461e7cafa0bd\",\"serviceBindingGuid\":\"f07854bf-1d04-4f38-bc81-087103b891c1\",\"metadata\":\"{\"username\":\"f07854bf-1d04-4f38-bc81-087103b891c1\",\"password\":\"be24bdd1-e3b5-453b-9b7f-ee3e947e1086\",\"uri\":\"amqp://f07854bf-1d04-4f38-bc81-087103b891c1:be24bdd1-e3b5-453b-9b7f-ee3e947e1086@100.172.62.51:5672/a7fec8c2-e9e3-49c5-a66f-461e7cafa0bd\",\"host\":\"10.72.6.151\",\"port\":5672}\"},\"eats\":{\"serviceInstanceGuid\":\"ba2a9fff-af37-4f48-a18b-ca428117b2ca\",\"serviceBindingGuid\":\"1d4c8ba4-a06f-40f4-85c9-ccf0db793afa\",\"metadata\":\"{\"entity\":{\"service_instance_guid\":\"ba2a9fff-af37-4f48-a18b-ca428117b2ca\",\"service_instance_url\":\"/v2/service_instances/ba2a9fff-af37-4f48-a18b-ca428117b2ca\",\"binding_options\":{},\"volume_mounts\":[],\"app_url\":\"/v2/apps/2b5dab66-c8b1-44d0-b191-9f87b37c7850\",\"gateway_name\":\"\",\"app_guid\":\"2b5dab66-c8b1-44d0-b191-9f87b37c7850\",\"syslog_drain_url\":null,\"gateway_data\":null,\"credentials\":{\"version\":\"1\",\"trusted-issuer-ids\":\"https://e50d9886-e63c-4d9a-8ea2-e4d106cd5107.predix-uaa.run.aws-usw02-pr.ice.predix.io/oauth/token\",\"catalog-uri\":\"https://event-audit-trail.run.aws-usw02-pr.ice.predix.io\",\"zone-oauth-scope\":\"event-audit-trail.zone.8a8e3d49-61cd-4045-ba82-44b707f95383.user\",\"tenant-uuid\":\"8a8e3d49-61cd-4045-ba82-44b707f95383\"}},\"metadata\":{\"guid\":\"1d4c8ba4-a06f-40f4-85c9-ccf0db793afa\",\"updated_at\":null,\"created_at\":\"2016-10-05T19:13:04Z\",\"url\":\"/v2/service_bindings/1d4c8ba4-a06f-40f4-85c9-ccf0db793afa\"}}\"}}}",
+    "eventTenantUuid": "595ddf82-0ee1-4f30-ac23-e9854370a4bc"
+  },
+   "uuid": "cf6321bc-4be8-48bd-8058-71602fc78f63",
+   "status": 1000,
+   "message": "OK",
+   "timestamp": 1466015044971
+</code></pre>
+
+<h2>
+<a id="response-codes" class="anchor" href="#response-codes" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Response Codes</h2>
+
+<p>These are the service-specific responses embedded in service responses</p>
+
+<ul>
+<li>
+<strong>1000</strong> - OK</li>
+<li>
+<strong>1001</strong> - Tenant not found or undefined</li>
+<li>
+<strong>1002</strong> - Routing key not found or undefined</li>
+<li>
+<strong>1003</strong> - File paramter is undefined</li>
+<li>
+<strong>1004</strong> - No message found</li>
+</ul>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/emerging-verticals-docs">emerging-verticals-docs</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
