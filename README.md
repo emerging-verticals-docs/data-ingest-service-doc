@@ -25,20 +25,42 @@ A manifest has been provided
 ## APIs
 
 ### Ingest Data (HTTPS)
-* POST tenants/{tenant_uuid}/ingest
+* POST tenants/{tenant_uuid}/file/{routing_key}
     * Content - multipart/form-data
     * URI path parameters
         * tenant_uuid - uuid of tenant
+        * routing_key - routing key for the client to subscriber queue
     * Request Body FORM parameters
          * file - file to be ingested
-         * routing-key - subscriber queue
 
 * Sample Response Payload
 ```
   "payload": {
     "uuid": "ac22ae56-2fa2-47cb-9044-62992c0bba1c",
     "status": "QUEUED",
-    "filename": "testfile.txt"
+    "source": "testfile.txt"
+  },
+  "uuid": "969e00ad-3ea8-4468-81b3-08b0239c887c",
+  "status": 1000,
+  "message": "OK",
+  "timestamp": 1459470908881
+```
+
+### Ingest Data (HTTPS)
+* POST tenants/{tenant_uuid}/raw/{routing_key}
+    * Content - x-www-form-urlencoded
+    * URI path parameters
+        * tenant_uuid - uuid of tenant
+        * routing_key - routing key for the client to subscriber queue
+    * Request Body
+         * User data in plain/text
+
+* Sample Response Payload
+```
+  "payload": {
+    "uuid": "ac22ae56-2fa2-47cb-9044-62992c0bba1c",
+    "status": "QUEUED",
+    "source": "username"
   },
   "uuid": "969e00ad-3ea8-4468-81b3-08b0239c887c",
   "status": 1000,
@@ -58,7 +80,7 @@ A manifest has been provided
   "payload": {
     "uuid": "ac22ae56-2fa2-47cb-9044-62992c0bba1c",
     "status": "QUEUED",
-    "filename": "testfile.txt"
+    "source": ""
   },
   "uuid": "969e00ad-3ea8-4468-81b3-08b0239c887c",
   "status": 1000,
