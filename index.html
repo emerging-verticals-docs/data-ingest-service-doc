@@ -65,7 +65,7 @@
 
 <ul>
 <li>
-<p>POST tenants/{tenant_uuid}/ingest</p>
+<p>POST tenants/{tenant_uuid}/file/{routing_key}</p>
 
 <ul>
 <li>Content - multipart/form-data</li>
@@ -73,13 +73,13 @@
 
 <ul>
 <li>tenant_uuid - uuid of tenant</li>
+<li>routing_key - routing key for the client to subscriber queue</li>
 </ul>
 </li>
 <li>Request Body FORM parameters
 
 <ul>
 <li>file - file to be ingested</li>
-<li>routing-key - subscriber queue</li>
 </ul>
 </li>
 </ul>
@@ -90,7 +90,45 @@
 <pre><code>  "payload": {
     "uuid": "ac22ae56-2fa2-47cb-9044-62992c0bba1c",
     "status": "QUEUED",
-    "filename": "testfile.txt"
+    "source": "testfile.txt"
+  },
+  "uuid": "969e00ad-3ea8-4468-81b3-08b0239c887c",
+  "status": 1000,
+  "message": "OK",
+  "timestamp": 1459470908881
+</code></pre>
+
+<h3>
+<a id="ingest-data-https-1" class="anchor" href="#ingest-data-https-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Ingest Data (HTTPS)</h3>
+
+<ul>
+<li>
+<p>POST tenants/{tenant_uuid}/raw/{routing_key}</p>
+
+<ul>
+<li>Content - x-www-form-urlencoded</li>
+<li>URI path parameters
+
+<ul>
+<li>tenant_uuid - uuid of tenant</li>
+<li>routing_key - routing key for the client to subscriber queue</li>
+</ul>
+</li>
+<li>Request Body
+
+<ul>
+<li>User data in plain/text</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Sample Response Payload</p></li>
+</ul>
+
+<pre><code>  "payload": {
+    "uuid": "ac22ae56-2fa2-47cb-9044-62992c0bba1c",
+    "status": "QUEUED",
+    "source": "username"
   },
   "uuid": "969e00ad-3ea8-4468-81b3-08b0239c887c",
   "status": 1000,
@@ -122,7 +160,7 @@
 <pre><code>  "payload": {
     "uuid": "ac22ae56-2fa2-47cb-9044-62992c0bba1c",
     "status": "QUEUED",
-    "filename": "testfile.txt"
+    "source": ""
   },
   "uuid": "969e00ad-3ea8-4468-81b3-08b0239c887c",
   "status": 1000,
